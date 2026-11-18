@@ -27,3 +27,10 @@ dist-ssr
 .env
 .env.local
 .env.production.local
+
+# Local reference material (design mockups)
+ejemplos/
+
+# Local agent notes and indexes
+odd/
+.atl/
