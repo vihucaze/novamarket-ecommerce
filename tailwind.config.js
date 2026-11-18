@@ -8,10 +8,11 @@ export default {
     extend: {
       colors: {
         brand: {
-          primary: "#2563eb",
+          primary: "#3E29E3",
           secondary: "#0284c7",
           accent: "#10b981",
-          dark: "#0f172a"
+          dark: "#0f172a",
+          neutral: "#71798E"
         }
       }
     },
@@ -23,7 +24,7 @@ export default {
     themes: [
       {
         novamarket: {
-          "primary": "#2563eb",
+          "primary": "#3E29E3",
           "secondary": "#0284c7",
           "accent": "#10b981",
           "neutral": "#1e293b",

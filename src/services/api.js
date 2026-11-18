@@ -1,7 +1,13 @@
 import axios from 'axios';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+
+export const UNAUTHORIZED_EVENT = 'novamarket:unauthorized';
+
+const AUTH_ENDPOINTS = ['/auth/login', '/auth/register'];
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -22,15 +28,21 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401) {
-      const currentPath = window.location.pathname;
-      if (currentPath.includes('/admin') || currentPath.includes('/checkout')) {
-        localStorage.removeItem('novamarket_token');
-        localStorage.removeItem('novamarket_user');
+    const status = error.response?.status;
+    const url = error.config?.url || '';
+    const isCredentialCheck = AUTH_ENDPOINTS.some((endpoint) => url.includes(endpoint));
+
+    if (status === 401 && !isCredentialCheck) {
+      localStorage.removeItem('novamarket_token');
+      localStorage.removeItem('novamarket_user');
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent(UNAUTHORIZED_EVENT));
       }
     }
+
     return Promise.reject(error);
   }
 );
 
+export { API_BASE_URL };
 export default api;

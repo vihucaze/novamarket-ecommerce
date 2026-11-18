@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { Search, Filter, PackageOpen, RotateCcw } from 'lucide-react';
 import productService from '../services/productService';
 import ProductCard from '../components/catalog/ProductCard';
+import { resolveCategoryId } from '../utils/categoryRouting';
 
 const CATEGORIES = [
   { id: 'todos', label: 'Todos los Productos' },
@@ -13,7 +14,8 @@ const CATEGORIES = [
 
 export function CatalogPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const catParam = searchParams.get('cat') || 'todos';
+  const categoryIds = CATEGORIES.map(({ id }) => id);
+  const catParam = resolveCategoryId(searchParams.get('cat') || 'todos', categoryIds);
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,7 +23,7 @@ export function CatalogPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    const current = searchParams.get('cat') || 'todos';
+    const current = resolveCategoryId(searchParams.get('cat') || 'todos', categoryIds);
     setSelectedCategory(current);
   }, [searchParams]);
 

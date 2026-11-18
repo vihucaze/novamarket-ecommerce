@@ -17,13 +17,14 @@ import AdminRoute from './AdminRoute';
 export function AppRouter() {
   return (
     <Routes>
+      <Route path="login" element={<LoginPage />} />
+      <Route path="register" element={<RegisterPage />} />
+
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path="catalog" element={<CatalogPage />} />
         <Route path="product/:id" element={<ProductDetailPage />} />
         <Route path="cart" element={<CartPage />} />
-        <Route path="login" element={<LoginPage />} />
-        <Route path="register" element={<RegisterPage />} />
 
         <Route element={<PrivateRoute />}>
           <Route path="checkout" element={<CheckoutPage />} />
