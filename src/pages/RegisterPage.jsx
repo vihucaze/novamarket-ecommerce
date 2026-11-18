@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserPlus, User, Mail, Lock, AlertCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { getApiErrorMessage, validatePassword } from '../services/authNormalizer';
 
 export function RegisterPage() {
   const navigate = useNavigate();
@@ -29,8 +30,9 @@ export function RegisterPage() {
       return;
     }
 
-    if (formData.password.length < 6) {
-      setErrorMessage('La contraseña debe tener al menos 6 caracteres.');
+    const passwordError = validatePassword(formData.password);
+    if (passwordError) {
+      setErrorMessage(passwordError);
       return;
     }
 
@@ -41,8 +43,10 @@ export function RegisterPage() {
     } catch (err) {
       console.error('Error en registro:', err);
       setErrorMessage(
-        err.response?.data?.message ||
+        getApiErrorMessage(
+          err,
           'No se pudo completar el registro. Es posible que el correo ya esté en uso.'
+        )
       );
     } finally {
       setLoading(false);
@@ -117,7 +121,7 @@ export function RegisterPage() {
                 required
                 value={formData.password}
                 onChange={handleChange}
-                placeholder="Mínimo 6 caracteres"
+                placeholder="Mayúscula, minúscula, número y símbolo"
                 className="input input-bordered input-sm sm:input-md w-full pl-10"
               />
               <Lock className="w-4 h-4 text-base-content/40 absolute left-3.5 top-1/2 -translate-y-1/2" />

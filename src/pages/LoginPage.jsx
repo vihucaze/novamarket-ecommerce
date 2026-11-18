@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { LogIn, Lock, Mail, AlertCircle, ShieldCheck, User } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { getApiErrorMessage } from '../services/authNormalizer';
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -31,8 +32,10 @@ export function LoginPage() {
     } catch (err) {
       console.error('Error de autenticación:', err);
       setErrorMessage(
-        err.response?.data?.message ||
+        getApiErrorMessage(
+          err,
           'Mmm, parece que los datos ingresados no son correctos. ¡Verificá tus credenciales e intentá de nuevo!'
+        )
       );
     } finally {
       setLoading(false);
