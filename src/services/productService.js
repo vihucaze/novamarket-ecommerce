@@ -1,4 +1,4 @@
-import api from './api';
+import api from './api.js';
 
 const INITIAL_MOCK_PRODUCTS = [
   {
@@ -78,32 +78,44 @@ function saveLocalMockProducts(products) {
   localStorage.setItem('novamarket_mock_products', JSON.stringify(products));
 }
 
+function mockProductsForCategory(category) {
+  let products = getLocalMockProducts().filter((p) => p.active !== false);
+  if (category && category !== 'todos') {
+    products = products.filter((p) => p.category.toLowerCase() === category.toLowerCase());
+  }
+  return products;
+}
+
 export const productService = {
   async getProducts(category) {
     try {
       const url = category && category !== 'todos' ? `/products?category=${encodeURIComponent(category)}` : '/products';
       const response = await api.get(url);
+      if (!Array.isArray(response.data)) {
+        console.warn('⚠️ El API no devolvió una lista de productos; usando catálogo local mock');
+        return mockProductsForCategory(category);
+      }
       return response.data;
     } catch (err) {
       console.warn('⚠️ Usando catálogo local mock para productos');
-      let products = getLocalMockProducts().filter((p) => p.active !== false);
-      if (category && category !== 'todos') {
-        products = products.filter((p) => p.category.toLowerCase() === category.toLowerCase());
-      }
-      return products;
+      return mockProductsForCategory(category);
     }
   },
 
   async getProductById(id) {
     try {
       const response = await api.get(`/products/${id}`);
-      return response.data;
+      if (response.data && typeof response.data === 'object' && response.data._id) {
+        return response.data;
+      }
+      console.warn('⚠️ El API no devolvió un producto válido; usando catálogo local mock');
     } catch (err) {
-      const products = getLocalMockProducts();
-      const found = products.find((p) => p._id === id);
-      if (found) return found;
-      throw new Error('Producto no encontrado');
+      // cae al fallback local de abajo
     }
+    const products = getLocalMockProducts();
+    const found = products.find((p) => p._id === id);
+    if (found) return found;
+    throw new Error('Producto no encontrado');
   },
 
   async createProduct(productData) {
