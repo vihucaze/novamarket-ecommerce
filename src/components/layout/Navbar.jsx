@@ -65,12 +65,6 @@ export function Navbar() {
               Inicio
             </NavLink>
             <Link
-              to="/catalog"
-              className={navLinkClass({ isActive: isCatalogNavigationItemActive(location, null) })}
-            >
-              Catálogo
-            </Link>
-            <Link
               to="/catalog?cat=perifericos"
               className={navLinkClass({ isActive: isCatalogNavigationItemActive(location, 'periféricos') })}
             >
@@ -88,6 +82,9 @@ export function Navbar() {
             >
               Gadgets
             </Link>
+            <NavLink to="/contact" className={navLinkClass}>
+              Contacto
+            </NavLink>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -191,13 +188,6 @@ export function Navbar() {
               Inicio
             </Link>
             <Link
-              to="/catalog"
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-lg hover:bg-base-200 text-sm font-medium"
-            >
-              Catálogo Completo
-            </Link>
-            <Link
               to="/catalog?cat=perifericos"
               onClick={() => setMobileMenuOpen(false)}
               className="px-3 py-2 rounded-lg hover:bg-base-200 text-sm font-medium"
@@ -217,6 +207,13 @@ export function Navbar() {
               className="px-3 py-2 rounded-lg hover:bg-base-200 text-sm font-medium"
             >
               Gadgets
+            </Link>
+            <Link
+              to="/contact"
+              onClick={() => setMobileMenuOpen(false)}
+              className="px-3 py-2 rounded-lg hover:bg-base-200 text-sm font-medium"
+            >
+              Contacto
             </Link>
             {!isAuthenticated && (
               <div className="pt-2 border-t border-base-200 flex flex-col gap-2">

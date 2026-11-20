@@ -12,6 +12,7 @@ import RegisterPage from '../pages/RegisterPage';
 import AdminPage from '../pages/AdminPage';
 import ProfilePage from '../pages/ProfilePage';
 import CloseAccountPage from '../pages/CloseAccountPage';
+import ContactPage from '../pages/ContactPage';
 import NotFoundPage from '../pages/NotFoundPage';
 import PrivateRoute from './PrivateRoute';
 import AdminRoute from './AdminRoute';
@@ -24,6 +25,7 @@ export function AppRouter() {
 
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
+        <Route path="contact" element={<ContactPage />} />
         <Route path="catalog" element={<CatalogPage />} />
         <Route path="product/:id" element={<ProductDetailPage />} />
         <Route path="cart" element={<CartPage />} />
