@@ -4,7 +4,7 @@ import { ChevronRight, CircleOff, User } from 'lucide-react';
 
 export function AccountLayout({ pageTitle, children }) {
   return (
-    <div className="min-h-full bg-base-200/40">
+    <div className="min-h-full bg-background">
       <div className="max-w-7xl mx-auto px-4 md:px-12 py-8 md:py-10">
         <nav aria-label="Ruta de navegación" className="flex items-center gap-2 mb-8 text-xs font-semibold uppercase tracking-wider text-base-content/60">
           <Link to="/" className="hover:text-primary transition-colors">Inicio</Link>

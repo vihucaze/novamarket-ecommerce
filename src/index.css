@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply antialiased bg-base-100 text-base-content;
+    @apply antialiased bg-background text-on-surface;
     font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   }
 }
