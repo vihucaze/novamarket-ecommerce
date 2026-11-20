@@ -1,8 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Zap, Shield, Sparkles, Keyboard, Headphones, Cpu } from 'lucide-react';
+import { ArrowRight, BadgeCheck, Cpu, Headphones, Keyboard, RefreshCw, Shield } from 'lucide-react';
 import productService from '../services/productService';
 import ProductCard from '../components/catalog/ProductCard';
+
+const shoppingBenefits = [
+  {
+    Icon: BadgeCheck,
+    title: 'Productos 100% originales',
+    description: 'Garantía genuina y confiable',
+  },
+  {
+    Icon: Shield,
+    title: 'Pago seguro',
+    description: 'Pago cifrado con SSL de 256 bits',
+  },
+  {
+    Icon: RefreshCw,
+    title: 'Devoluciones fáciles',
+    description: '7 días para devoluciones y cambios',
+  },
+  {
+    Icon: Headphones,
+    title: 'Soporte 24/7',
+    description: 'Estamos aquí para ayudarte cada día',
+  },
+];
 
 export function HomePage() {
   const [featuredProducts, setFeaturedProducts] = useState([]);
@@ -24,27 +47,57 @@ export function HomePage() {
 
   return (
     <div className="space-y-16 pb-16">
-      <section className="relative overflow-hidden bg-gradient-to-br from-neutral to-neutral-focus text-neutral-content py-16 sm:py-24">
-        <div className="absolute inset-0 bg-[radial-gradient(#2563eb_1px,transparent_1px)] [background-size:24px_24px] opacity-20 pointer-events-none" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-2xl space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 text-primary border border-primary/30 text-xs font-semibold uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5" /> Nueva Colección NovaMarket 2026
+      <section className="space-y-6 pt-6 sm:pt-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative isolate flex min-h-[420px] items-center overflow-hidden rounded-3xl bg-[#080b1e] shadow-xl sm:min-h-[480px] lg:h-[min(38vw,500px)]">
+            <img
+              src="/images/hero-banner.jpg"
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 h-full w-full object-cover object-[62%_center] sm:object-center"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#080b1e]/95 via-[#080b1e]/75 to-[#080b1e]/15" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_18%_110%,rgba(62,41,227,0.55),transparent_55%)]" />
+
+            <div className="relative z-10 w-full px-6 py-12 sm:px-12 lg:px-14">
+              <div className="max-w-xl space-y-5">
+                <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300/20 bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-emerald-300 backdrop-blur-sm">
+                  <span className="h-2 w-2 rounded-full bg-emerald-400" aria-hidden="true" />
+                  Última colección
+                </div>
+                <h1 className="text-4xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl">
+                  Renová tu día a día con{' '}
+                  <span className="bg-gradient-to-r from-violet-300 to-fuchsia-400 bg-clip-text text-transparent">
+                    tecnología
+                  </span>
+                </h1>
+                <p className="max-w-lg text-sm leading-relaxed text-white/80 sm:text-base">
+                  Dispositivos premium. Mejor rendimiento. Un futuro más inteligente.
+                </p>
+                <Link
+                  to="/catalog"
+                  className="btn btn-primary btn-sm gap-2 shadow-lg shadow-primary/30 sm:btn-md"
+                >
+                  Comprar ahora <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
             </div>
-            <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight text-white">
-              Potenciá tu Setup con Periféricos de <span className="text-primary">Alto Nivel</span>.
-            </h1>
-            <p className="text-base sm:text-lg text-neutral-content/80 leading-relaxed">
-              Equipamiento gamer y profesional diseñado para máxima precisión, ergonomía y rendimiento. Encontrá teclados mecánicos, mouses ultra-light y accesorios indispensables.
-            </p>
-            <div className="flex flex-wrap items-center gap-4 pt-2">
-              <Link to="/catalog" className="btn btn-primary btn-md sm:btn-lg gap-2 shadow-lg shadow-primary/30">
-                Explorar Catálogo <ArrowRight className="w-5 h-5" />
-              </Link>
-              <Link to="/catalog?cat=perifericos" className="btn btn-outline btn-md sm:btn-lg text-white border-white/30 hover:bg-white/10">
-                Ver Periféricos
-              </Link>
-            </div>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 divide-y divide-base-200 rounded-2xl border border-base-200 bg-base-100 px-4 shadow-sm sm:grid-cols-2 sm:divide-y-0 xl:grid-cols-4 xl:divide-x xl:divide-y-0">
+            {shoppingBenefits.map(({ Icon, title, description }) => (
+              <div key={title} className="flex items-center gap-4 px-3 py-5 sm:px-5">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <Icon className="h-6 w-6" aria-hidden="true" />
+                </span>
+                <div className="min-w-0">
+                  <h2 className="text-sm font-bold text-base-content">{title}</h2>
+                  <p className="mt-1 text-xs leading-relaxed text-base-content/60">{description}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
