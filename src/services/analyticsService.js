@@ -1,33 +1,28 @@
-import api from './api';
+const STORAGE_KEY = 'novamarket_tracking_logs';
+const MAX_LOGS = 50;
 
 function generateEventId() {
   return `evt-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
 }
 
-function getTimestamp() {
-  return new Date().toISOString();
-}
-
 function emitEvent(eventName, payload) {
   const fullPayload = {
     event_id: generateEventId(),
-    event_timestamp: getTimestamp(),
+    event_timestamp: new Date().toISOString(),
     ...payload,
   };
 
-  console.groupCollapsed(`📊 [Analytics Event]: ${eventName}`);
+  console.groupCollapsed(`[Analytics Event]: ${eventName}`);
   console.log('Payload:', fullPayload);
   console.groupEnd();
 
   try {
-    const history = JSON.parse(sessionStorage.getItem('novamarket_tracking_logs') || '[]');
+    const history = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '[]');
     history.push({ event: eventName, ...fullPayload });
-    sessionStorage.setItem('novamarket_tracking_logs', JSON.stringify(history.slice(-50)));
-  } catch (e) {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(history.slice(-MAX_LOGS)));
+  } catch (error) {
+    return fullPayload;
   }
-
-  api.post('/analytics/events', { event: eventName, ...fullPayload }).catch(() => {
-  });
 
   return fullPayload;
 }
@@ -44,7 +39,7 @@ export const analytics = {
   trackAddToCart({ userId, cartId, productId, quantity, unitPrice }) {
     return emitEvent('add_to_cart', {
       user_id: userId || null,
-      cart_id: cartId || 'cart-guest',
+      cart_id: cartId,
       product_id: productId,
       quantity: Number(quantity) || 1,
       unit_price: Number(unitPrice),
@@ -54,7 +49,7 @@ export const analytics = {
   trackRemoveFromCart({ userId, cartId, productId, quantity, unitPrice }) {
     return emitEvent('remove_from_cart', {
       user_id: userId || null,
-      cart_id: cartId || 'cart-guest',
+      cart_id: cartId,
       product_id: productId,
       quantity: Number(quantity) || 1,
       unit_price: Number(unitPrice),
@@ -64,7 +59,7 @@ export const analytics = {
   trackBeginCheckout({ userId, cartId }) {
     return emitEvent('begin_checkout', {
       user_id: userId || null,
-      cart_id: cartId || 'cart-guest',
+      cart_id: cartId,
     });
   },
 
@@ -72,20 +67,16 @@ export const analytics = {
     return emitEvent('purchase_completed', {
       user_id: userId || null,
       order_id: orderId,
-      cart_id: cartId || 'cart-guest',
+      cart_id: cartId,
     });
   },
 
   trackLogin({ userId }) {
-    return emitEvent('login', {
-      user_id: userId,
-    });
+    return emitEvent('login', { user_id: userId });
   },
 
   trackSignUp({ userId }) {
-    return emitEvent('sign_up', {
-      user_id: userId,
-    });
+    return emitEvent('sign_up', { user_id: userId });
   },
 };
 

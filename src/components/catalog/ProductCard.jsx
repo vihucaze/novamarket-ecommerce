@@ -19,7 +19,7 @@ export function ProductCard({ product }) {
   const isOutOfStock = product.stock <= 0;
   const isLowStock = product.stock > 0 && product.stock <= 5;
 
-  const fallbackImage = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80';
+  const fallbackImage = 'https://picsum.photos/seed/novamarket/600/600';
 
   return (
     <div className="card bg-base-100 border border-base-200 hover:border-primary/40 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col h-full group">

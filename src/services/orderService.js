@@ -1,69 +1,46 @@
 import api from './api';
 
-function getLocalOrders() {
-  const stored = localStorage.getItem('novamarket_mock_orders');
-  return stored ? JSON.parse(stored) : [];
+function normalizeOrder(raw) {
+  if (!raw) return raw;
+
+  return {
+    ...raw,
+    _id: raw._id ?? raw.id,
+    id: raw.id ?? raw._id,
+    totalAmount: Number(raw.totalAmount ?? raw.total ?? 0),
+    status: raw.status || 'pending',
+    createdAt: raw.createdAt || raw.created_at,
+  };
 }
 
-function saveLocalOrders(orders) {
-  localStorage.setItem('novamarket_mock_orders', JSON.stringify(orders));
+function extractList(data) {
+  if (Array.isArray(data)) return data;
+  return data?.orders || data?.items || data?.data || data?.results || [];
+}
+
+function extractOne(data) {
+  return data?.order || data?.data || data;
 }
 
 export const orderService = {
-  async createOrder(orderPayload) {
-    try {
-      const response = await api.post('/orders', orderPayload);
-      return response.data;
-    } catch (err) {
-      console.warn('⚠️ Guardando orden en almacenamiento local (Modo Demo)');
-      const orders = getLocalOrders();
-      const newOrder = {
-        _id: 'ord-' + Math.floor(1000 + Math.random() * 9000),
-        items: orderPayload.items,
-        totalAmount: orderPayload.totalAmount,
-        shippingAddress: orderPayload.shippingAddress,
-        status: 'confirmed',
-        createdAt: new Date().toISOString(),
-        user: orderPayload.user || 'usr-guest',
-      };
-      orders.unshift(newOrder);
-      saveLocalOrders(orders);
-      return newOrder;
-    }
+  async createOrder(payload) {
+    const response = await api.post('/orders', payload);
+    return normalizeOrder(extractOne(response.data));
   },
 
   async getMyOrders() {
-    try {
-      const response = await api.get('/orders/my');
-      return response.data;
-    } catch (err) {
-      return getLocalOrders();
-    }
+    const response = await api.get('/orders/my');
+    return extractList(response.data).map(normalizeOrder);
   },
 
   async getAllOrders() {
-    try {
-      const response = await api.get('/orders');
-      return response.data;
-    } catch (err) {
-      return getLocalOrders();
-    }
+    const response = await api.get('/orders');
+    return extractList(response.data).map(normalizeOrder);
   },
 
   async updateOrderStatus(orderId, status) {
-    try {
-      const response = await api.put(`/orders/${orderId}/status`, { status });
-      return response.data;
-    } catch (err) {
-      const orders = getLocalOrders();
-      const order = orders.find((o) => o._id === orderId);
-      if (order) {
-        order.status = status;
-        saveLocalOrders(orders);
-        return order;
-      }
-      throw new Error('Orden no encontrada');
-    }
+    const response = await api.put(`/orders/${orderId}/status`, { status });
+    return normalizeOrder(extractOne(response.data));
   },
 };
 

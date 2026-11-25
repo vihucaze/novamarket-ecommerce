@@ -77,7 +77,7 @@ export function AdminPage() {
         category: formData.category,
         price: Number(formData.price),
         stock: Number(formData.stock),
-        imageUrl: formData.imageUrl || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80',
+        imageUrl: formData.imageUrl || 'https://picsum.photos/seed/novamarket/600/600',
         description: formData.description,
       };
 
@@ -190,7 +190,7 @@ export function AdminPage() {
                           src={p.imageUrl}
                           alt={p.name}
                           className="w-10 h-10 rounded-lg object-cover bg-base-200 shrink-0"
-                          onError={(e) => (e.target.src = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=100&q=80')}
+                          onError={(e) => (e.target.src = 'https://picsum.photos/seed/novamarket/600/600')}
                         />
                         <div className="max-w-xs truncate">
                           <span className="block font-semibold">{p.name}</span>

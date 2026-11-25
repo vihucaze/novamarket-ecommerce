@@ -69,13 +69,12 @@ export function CheckoutPage() {
           phone: formData.phone,
           notes: formData.notes,
         },
-        user: user?._id || user?.id || 'usr-guest',
       };
 
       const createdOrder = await orderService.createOrder(orderPayload);
 
       clearCart();
-      navigate(`/order-success/${createdOrder._id || 'ord-demo-success'}`);
+      navigate(`/order-success/${createdOrder._id}`);
     } catch (err) {
       console.error('Error procesando compra:', err);
       setError('Ocurrió un error al procesar el pedido. Por favor intentá nuevamente.');

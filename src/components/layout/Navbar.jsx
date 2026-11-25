@@ -117,11 +117,6 @@ export function Navbar() {
                     <span className="font-semibold text-base-content">{user?.name}</span>
                     <span className="text-xs text-base-content/60 lowercase">{user?.email}</span>
                   </li>
-                  <li>
-                    <Link to="/profile" className="rounded-lg font-medium text-base-content/80">
-                      <User className="h-4 w-4" aria-hidden="true" /> Mi cuenta
-                    </Link>
-                  </li>
                   {isAdmin && (
                     <li>
                       <Link to="/admin" className="text-secondary font-medium rounded-lg">
