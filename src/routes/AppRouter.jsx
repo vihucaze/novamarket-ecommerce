@@ -10,8 +10,6 @@ import OrderSuccessPage from '../pages/OrderSuccessPage';
 import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
 import AdminPage from '../pages/AdminPage';
-import ProfilePage from '../pages/ProfilePage';
-import CloseAccountPage from '../pages/CloseAccountPage';
 import NotFoundPage from '../pages/NotFoundPage';
 import PrivateRoute from './PrivateRoute';
 import AdminRoute from './AdminRoute';
@@ -31,8 +29,6 @@ export function AppRouter() {
         <Route element={<PrivateRoute />}>
           <Route path="checkout" element={<CheckoutPage />} />
           <Route path="order-success/:orderId" element={<OrderSuccessPage />} />
-          <Route path="profile" element={<ProfilePage />} />
-          <Route path="profile/close-account" element={<CloseAccountPage />} />
         </Route>
 
         <Route element={<AdminRoute />}>

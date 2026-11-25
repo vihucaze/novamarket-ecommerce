@@ -131,9 +131,6 @@ export function LoginPage() {
                 <label className={labelClass} htmlFor="password">
                   Contraseña
                 </label>
-                <span className="text-[12px] font-semibold text-[#3e29e3] cursor-default">
-                  ¿Olvidaste tu contraseña?
-                </span>
               </div>
               <div className="relative">
                 <input
